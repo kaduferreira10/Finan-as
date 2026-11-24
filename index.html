@@ -181,6 +181,8 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .welcome ol li{margin-bottom:6px}
 .welcome p{font-size:13px;color:var(--muted);margin:0 0 12px}
 .userbar a{color:var(--muted);font-size:12px;padding:4px}
+.legal{font-size:12px;color:var(--muted);text-align:center;line-height:1.5;margin:14px 0 0}
+.legal a{color:var(--muted);text-decoration:underline}
 .userbar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
 .userbar button{border:0;background:transparent;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 .more{display:block;width:100%;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
@@ -283,6 +285,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
     <div class="okmsg" id="lMsg"></div>
     <div class="actions"><button type="submit" class="btn primary" id="lBtn">Entrar</button></div>
     <button type="button" class="linkbtn" id="forgot">Esqueci minha senha</button>
+    <p class="legal">Ao entrar, você concorda com os <a class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="lnkPriv" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
   </form>
 </div>
 
@@ -304,11 +307,12 @@ a.btn{display:block;text-align:center;text-decoration:none}
     <a class="btn primary" id="gateBuy" target="_blank" rel="noopener">Assinar novamente</a>
     <a class="btn ghost" id="gateHelp" target="_blank" rel="noopener" style="margin-top:8px">Falar com o suporte</a>
     <button type="button" class="linkbtn" id="gateOut">Sair</button>
+    <p class="legal"><a class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a> · <a class="lnkPriv" target="_blank" rel="noopener">Política de Privacidade</a></p>
   </div>
 </div>
 
 <div class="wrap">
-  <div class="userbar"><span id="who"></span><span><button type="button" id="installBtn" style="display:none">Instalar app</button> <button type="button" id="themeBtn">Tema</button> <a id="helpLink" target="_blank" rel="noopener">Ajuda</a> <button type="button" id="logout">Sair</button></span></div>
+  <div class="userbar"><span id="who"></span><span><button type="button" id="installBtn" style="display:none">Instalar app</button> <button type="button" id="themeBtn">Tema</button> <a id="helpLink" target="_blank" rel="noopener">Ajuda</a> <a class="lnkTermos" target="_blank" rel="noopener">Termos</a> <button type="button" id="logout">Sair</button></span></div>
   <div class="tabs" id="tabs">
     <button class="on" data-v="mes">Mês</button>
     <button data-v="con">Contas</button>
@@ -367,6 +371,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
       <li>Lance cada gasto e marque se ele foi <b>muito, pouco ou não necessário</b>.</li>
       <li>No fim do mês, abra <b>Relatórios</b> e veja quanto foi para gasto não necessário.</li>
     </ol>
+    <p class="legal" style="text-align:left">Leia os <a class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="lnkPriv" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
     <p id="welcomeHelp">Ficou com dúvida? <a id="welcomeHelpLink" target="_blank" rel="noopener">Fale com o suporte</a>.</p>
     <button type="button" class="btn ghost" id="welcomeOk" style="width:100%">Entendi</button>
   </section>
@@ -729,6 +734,9 @@ const SUPABASE_KEY = "sb_publishable_x_eFABu3sypprNK8_ujkQw_QZA_R3t_";
 // ===== VENDAS E SUPORTE (preencha) =====
 const LINK_ASSINATURA = "";   // link do checkout na Kiwify
 const SUPORTE_WHATSAPP = "";  // só números, com DDI e DDD. Ex.: 5511999999999
+// ===== TERMOS E PRIVACIDADE (troque quando tiver o domínio próprio) =====
+const TERMOS_URL = "https://kaduferreira10.github.io/salduu/termos.html";
+const PRIVACIDADE_URL = "https://kaduferreira10.github.io/salduu/privacidade.html";
 // ====================================
 const HELP_URL = SUPORTE_WHATSAPP ? "https://wa.me/"+SUPORTE_WHATSAPP.replace(/\D/g,"")+"?text="+encodeURIComponent("Oi! Preciso de ajuda com o "+APP_NOME+".") : "";
 const HASH = new URLSearchParams(location.hash.slice(1));
@@ -2160,6 +2168,8 @@ $("welcomeOk").onclick = ()=>{ try{ localStorage.setItem(welcomeKey(), "1"); }ca
 // links de assinatura e suporte
 if(LINK_ASSINATURA) $("gateBuy").href = LINK_ASSINATURA; else $("gateBuy").style.display = "none";
 [["gateHelp"],["helpLink"],["welcomeHelpLink"]].forEach(([id])=>{ if(HELP_URL) $(id).href = HELP_URL; });
+document.querySelectorAll(".lnkTermos").forEach(a=>{ a.href = TERMOS_URL; });
+document.querySelectorAll(".lnkPriv").forEach(a=>{ a.href = PRIVACIDADE_URL; });
 if(!HELP_URL){ $("gateHelp").style.display = "none"; $("helpLink").style.display = "none"; $("welcomeHelp").style.display = "none"; }
 
 (async ()=>{
