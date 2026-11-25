@@ -264,6 +264,36 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .ditem .dica{color:var(--muted)}
 .dnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.45}
 /* temas */
+/* cor de fundo escolhida pelo cliente (claro e escuro) */
+:root[data-fundo=branco]{--bg:#ffffff; --card:#ffffff; --line:#e4e4e1;}
+@media (prefers-color-scheme:dark){:root[data-fundo=branco]:not([data-mode=light]){--bg:#0c0c0c; --card:#181818; --line:#2b2b2b;}}
+:root[data-fundo=branco][data-mode=dark]{--bg:#0c0c0c; --card:#181818; --line:#2b2b2b;}
+:root[data-fundo=nevoa]{--bg:#edf1f6; --card:#ffffff; --line:#dbe2ea;}
+@media (prefers-color-scheme:dark){:root[data-fundo=nevoa]:not([data-mode=light]){--bg:#11151b; --card:#1a2029; --line:#2a323d;}}
+:root[data-fundo=nevoa][data-mode=dark]{--bg:#11151b; --card:#1a2029; --line:#2a323d;}
+:root[data-fundo=salvia]{--bg:#edf4ee; --card:#ffffff; --line:#d9e6dc;}
+@media (prefers-color-scheme:dark){:root[data-fundo=salvia]:not([data-mode=light]){--bg:#101712; --card:#19221b; --line:#28342b;}}
+:root[data-fundo=salvia][data-mode=dark]{--bg:#101712; --card:#19221b; --line:#28342b;}
+:root[data-fundo=lavanda]{--bg:#f1eff9; --card:#ffffff; --line:#e0dcf0;}
+@media (prefers-color-scheme:dark){:root[data-fundo=lavanda]:not([data-mode=light]){--bg:#14121b; --card:#1d1a27; --line:#2d2939;}}
+:root[data-fundo=lavanda][data-mode=dark]{--bg:#14121b; --card:#1d1a27; --line:#2d2939;}
+:root[data-fundo=rosa]{--bg:#f9eef1; --card:#ffffff; --line:#efdce1;}
+@media (prefers-color-scheme:dark){:root[data-fundo=rosa]:not([data-mode=light]){--bg:#1a1214; --card:#251a1d; --line:#37292d;}}
+:root[data-fundo=rosa][data-mode=dark]{--bg:#1a1214; --card:#251a1d; --line:#37292d;}
+:root[data-fundo=creme]{--bg:#faf5e8; --card:#fffdf7; --line:#ece3cc;}
+@media (prefers-color-scheme:dark){:root[data-fundo=creme]:not([data-mode=light]){--bg:#17140d; --card:#211d14; --line:#332d21;}}
+:root[data-fundo=creme][data-mode=dark]{--bg:#17140d; --card:#211d14; --line:#332d21;}
+/* cores dos gráficos (entradas, saídas e necessidade) */
+:root[data-grafico=suave]{--in:#4f8a6e; --in-bg:#e6f0ea; --out:#b8665a; --out-bg:#f6e8e5; --n1:#b8665a; --n2:#bf9a4f; --n3:#8c8c8c;}
+@media (prefers-color-scheme:dark){:root[data-grafico=suave]:not([data-mode=light]){--in:#7cc2a0; --in-bg:#1c2e25; --out:#e49a8c; --out-bg:#3a2420; --n1:#e49a8c; --n2:#dcc07a; --n3:#9a9a9a;}}
+:root[data-grafico=suave][data-mode=dark]{--in:#7cc2a0; --in-bg:#1c2e25; --out:#e49a8c; --out-bg:#3a2420; --n1:#e49a8c; --n2:#dcc07a; --n3:#9a9a9a;}
+:root[data-grafico=vibrante]{--in:#00a35c; --in-bg:#dcf7e9; --out:#e5312b; --out-bg:#fde4e2; --n1:#e5312b; --n2:#f59e0b; --n3:#6b7280;}
+@media (prefers-color-scheme:dark){:root[data-grafico=vibrante]:not([data-mode=light]){--in:#22d17f; --in-bg:#0f3322; --out:#ff5a52; --out-bg:#421a18; --n1:#ff5a52; --n2:#fbbf24; --n3:#9ca3af;}}
+:root[data-grafico=vibrante][data-mode=dark]{--in:#22d17f; --in-bg:#0f3322; --out:#ff5a52; --out-bg:#421a18; --n1:#ff5a52; --n2:#fbbf24; --n3:#9ca3af;}
+:root[data-grafico=daltonico]{--in:#0072b2; --in-bg:#e0eef7; --out:#d55e00; --out-bg:#fbe8dc; --n1:#d55e00; --n2:#b8860b; --n3:#7a7a7a;}
+@media (prefers-color-scheme:dark){:root[data-grafico=daltonico]:not([data-mode=light]){--in:#56b4e9; --in-bg:#13293a; --out:#f08a4b; --out-bg:#3a2214; --n1:#f08a4b; --n2:#f0c04a; --n3:#9a9a9a;}}
+:root[data-grafico=daltonico][data-mode=dark]{--in:#56b4e9; --in-bg:#13293a; --out:#f08a4b; --out-bg:#3a2214; --n1:#f08a4b; --n2:#f0c04a; --n3:#9a9a9a;}
+.swatches button i.duo{position:relative;overflow:hidden;border:1px solid var(--line)}
 .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .swatches button{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:10px 4px 8px;font:inherit;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
 .swatches button i{width:28px;height:28px;border-radius:50%;display:block}
@@ -274,6 +304,8 @@ a.btn{display:block;text-align:center;text-decoration:none}
 (function(){ try{ const t = JSON.parse(localStorage.getItem("tema")||"{}");
   if(t.mode && t.mode!=="auto") document.documentElement.dataset.mode = t.mode;
   if(t.accent && t.accent!=="padrao") document.documentElement.dataset.accent = t.accent;
+  if(t.fundo && t.fundo!=="padrao") document.documentElement.dataset.fundo = t.fundo;
+  if(t.grafico && t.grafico!=="padrao") document.documentElement.dataset.grafico = t.grafico;
 }catch(e){} })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
@@ -711,10 +743,19 @@ a.btn{display:block;text-align:center;text-decoration:none}
       <div class="hint">Automático segue o modo claro/escuro do seu celular.</div>
     </div>
     <div class="field">
+      <label>Cor de fundo</label>
+      <div class="swatches" id="tFundo"></div>
+    </div>
+    <div class="field">
+      <label>Cores dos gráficos</label>
+      <div class="swatches" id="tGrafico"></div>
+      <div class="hint">Entradas e saídas sempre mantêm cores opostas. A opção “Daltônico” usa azul e laranja, fáceis de diferenciar.</div>
+    </div>
+    <div class="field">
       <label>Cor dos botões e destaques</label>
       <div class="swatches" id="tAccent"></div>
     </div>
-    <div class="hint">O tema fica salvo neste aparelho.</div>
+    <div class="hint" id="tSync">O tema fica salvo na sua conta e aparece em todos os seus aparelhos.</div>
     <div class="actions"><button type="button" class="btn primary" id="tDone">Pronto</button></div>
   </div>
 </div>
@@ -1692,19 +1733,75 @@ const ACCENTS = [
   {k:"laranja", n:"Laranja", c:"#ea580c"},
   {k:"vinho", n:"Vinho", c:"#9f1239"}
 ];
-function getTema(){ try{ return Object.assign({mode:"auto", accent:"padrao"}, JSON.parse(localStorage.getItem("tema")||"{}")); }catch(e){ return {mode:"auto", accent:"padrao"}; } }
+const FUNDOS = [
+  {k:"padrao", n:"Areia", c:"#f6f5f2"},
+  {k:"branco", n:"Branco", c:"#ffffff"},
+  {k:"nevoa", n:"Névoa", c:"#dfe6ee"},
+  {k:"salvia", n:"Sálvia", c:"#dcebdf"},
+  {k:"lavanda", n:"Lavanda", c:"#e6e1f6"},
+  {k:"rosa", n:"Rosé", c:"#f4dfe5"},
+  {k:"creme", n:"Creme", c:"#f6ecd2"}
+];
+const GRAFICOS = [
+  {k:"padrao", n:"Padrão", a:"#1f8a5b", b:"#c4452f"},
+  {k:"suave", n:"Suave", a:"#4f8a6e", b:"#b8665a"},
+  {k:"vibrante", n:"Vibrante", a:"#00a35c", b:"#e5312b"},
+  {k:"daltonico", n:"Daltônico", a:"#0072b2", b:"#d55e00"}
+];
+const TEMA_PADRAO = {mode:"auto", accent:"padrao", fundo:"padrao", grafico:"padrao"};
+function temaValido(t){
+  const o = Object.assign({}, TEMA_PADRAO);
+  if(t && ["auto","light","dark"].includes(t.mode)) o.mode = t.mode;
+  if(t && ACCENTS.some(a=>a.k===t.accent)) o.accent = t.accent;
+  if(t && FUNDOS.some(a=>a.k===t.fundo)) o.fundo = t.fundo;
+  if(t && GRAFICOS.some(a=>a.k===t.grafico)) o.grafico = t.grafico;
+  return o;
+}
+function getTema(){ try{ return temaValido(JSON.parse(localStorage.getItem("tema")||"{}")); }catch(e){ return temaValido({}); } }
+function mesmoTema(a, b){ return ["mode","accent","fundo","grafico"].every(k=>a[k]===b[k]); }
 function applyTema(t){
+  t = temaValido(t);
   const r = document.documentElement;
-  if(t.mode==="auto") delete r.dataset.mode; else r.dataset.mode = t.mode;
-  if(t.accent==="padrao") delete r.dataset.accent; else r.dataset.accent = t.accent;
+  [["mode","auto"],["accent","padrao"],["fundo","padrao"],["grafico","padrao"]].forEach(([k,def])=>{
+    if(t[k]===def) delete r.dataset[k]; else r.dataset[k] = t[k];
+  });
   try{ localStorage.setItem("tema", JSON.stringify(t)); }catch(e){}
   document.querySelectorAll("#tMode button").forEach(b=>b.classList.toggle("on", b.dataset.m===t.mode));
   document.querySelectorAll("#tAccent button").forEach(b=>b.classList.toggle("on", b.dataset.a===t.accent));
+  document.querySelectorAll("#tFundo button").forEach(b=>b.classList.toggle("on", b.dataset.f===t.fundo));
+  document.querySelectorAll("#tGrafico button").forEach(b=>b.classList.toggle("on", b.dataset.g===t.grafico));
+  const bg = getComputedStyle(r).getPropertyValue("--bg").trim();
+  if(bg) document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.setAttribute("content", bg));
+}
+// guarda o tema na conta (aparece igual no celular e no computador)
+let temaTimer = null;
+function salvarTemaNaConta(t){
+  clearTimeout(temaTimer);
+  temaTimer = setTimeout(async ()=>{
+    if(!sb || !me) return;
+    const {data, error} = await sb.auth.updateUser({data:{tema:temaValido(t)}});
+    if(!error && data && data.user) me = data.user;
+  }, 800);
+}
+function mudarTema(parcial){ const t = {...getTema(), ...parcial}; applyTema(t); salvarTemaNaConta(t); }
+// ao entrar: usa o tema da conta; se a conta ainda não tem, guarda o deste aparelho
+function sincronizarTema(){
+  if(!me) return;
+  const daConta = me.user_metadata && me.user_metadata.tema;
+  const local = getTema();
+  if(daConta && typeof daConta === "object"){ const t = temaValido(daConta); if(!mesmoTema(t, local)) applyTema(t); }
+  else if(!mesmoTema(local, TEMA_PADRAO)) salvarTemaNaConta(local);
 }
 $("tAccent").innerHTML = ACCENTS.map(a=>`<button type="button" data-a="${a.k}"><i style="background:${a.c}"></i>${a.n}</button>`).join("");
+$("tFundo").innerHTML = FUNDOS.map(a=>`<button type="button" data-f="${a.k}"><i class="duo" style="background:${a.c}"></i>${a.n}</button>`).join("");
+$("tGrafico").innerHTML = GRAFICOS.map(a=>`<button type="button" data-g="${a.k}"><i class="duo" style="background:linear-gradient(135deg,${a.a} 50%,${a.b} 50%)"></i>${a.n}</button>`).join("");
 $("themeBtn").onclick = ()=>{ applyTema(getTema()); $("tOverlay").classList.add("open"); };
-$("tMode").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) applyTema({...getTema(), mode:b.dataset.m}); });
-$("tAccent").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) applyTema({...getTema(), accent:b.dataset.a}); });
+$("tMode").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) mudarTema({mode:b.dataset.m}); });
+$("tAccent").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) mudarTema({accent:b.dataset.a}); });
+$("tFundo").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) mudarTema({fundo:b.dataset.f}); });
+$("tGrafico").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) mudarTema({grafico:b.dataset.g}); });
+applyTema(getTema());   // acerta a cor da barra do celular com o fundo escolhido
+try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ()=>applyTema(getTema())); }catch(e){}
 $("tDone").onclick = ()=>$("tOverlay").classList.remove("open");
 $("tOverlay").addEventListener("click", e=>{ if(e.target.id==="tOverlay") $("tOverlay").classList.remove("open"); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $("tOverlay").classList.remove("open"); });
@@ -2173,6 +2270,7 @@ async function onSession(session){
   if(!(await hasAccess())){ items=[]; render(); showScreen("gate"); return; }
   showScreen(null);
   renderHello();
+  sincronizarTema();
   if(!nomeDe(me).nome) abrirNome(false);
   await loadAll();
 }
