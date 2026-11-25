@@ -187,6 +187,11 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .hello{display:flex;align-items:center;gap:6px;margin:0 0 12px;font-size:20px;font-weight:700;line-height:1.25;min-height:25px}
 .hello span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hello button{flex:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.signupcta{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.linkbtn.inline{display:inline;width:auto;margin:0;padding:0;color:var(--ink);font-weight:600;font-size:13px}
+.trialbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin:0 0 12px;font-size:13px}
+.trialbar.fim{border-color:var(--n2)}
+.trialbar a{flex:none;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;border-radius:999px;padding:6px 14px;font-size:13px}
 .nomeRow{display:flex;gap:10px}.nomeRow .field{flex:1;min-width:0}
 .userbar button{border:0;background:transparent;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 .more{display:block;width:100%;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
@@ -363,7 +368,26 @@ a.btn{display:block;text-align:center;text-decoration:none}
     <div class="okmsg" id="lMsg"></div>
     <div class="actions"><button type="submit" class="btn primary" id="lBtn">Entrar</button></div>
     <button type="button" class="linkbtn" id="forgot">Esqueci minha senha</button>
+    <div class="signupcta" id="toSignup" style="display:none">Ainda não tem conta? <button type="button" class="linkbtn inline" id="toSignupBtn">Teste grátis por <span class="diasTeste">7</span> dias</button></div>
     <p class="legal">Ao entrar, você concorda com os <a class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="lnkPriv" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
+  </form>
+</div>
+
+<div id="signup" class="screen">
+  <form id="signupForm" class="box" autocomplete="on">
+    <h2>Teste grátis por <span class="diasTeste">7</span> dias</h2>
+    <p>Crie sua conta e use o <span class="appName">Salduu+</span> completo. Sem cartão de crédito.</p>
+    <div class="nomeRow">
+      <div class="field"><label for="sNome">Nome</label><input id="sNome" autocomplete="given-name" maxlength="40" required></div>
+      <div class="field"><label for="sSobre">Sobrenome</label><input id="sSobre" autocomplete="family-name" maxlength="60" required></div>
+    </div>
+    <div class="field"><label for="sEmail">E-mail</label><input id="sEmail" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="sPass">Senha</label><input id="sPass" type="password" autocomplete="new-password" minlength="6" required><div class="hint">Pelo menos 6 caracteres.</div></div>
+    <div class="err" id="sErr"></div>
+    <div class="okmsg" id="sMsg"></div>
+    <div class="actions"><button type="submit" class="btn primary" id="sBtn">Começar meu teste grátis</button></div>
+    <button type="button" class="linkbtn" id="toLogin">Já tenho conta · Entrar</button>
+    <p class="legal">Ao criar a conta, você concorda com os <a class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a> e a <a class="lnkPriv" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
   </form>
 </div>
 
@@ -397,8 +421,8 @@ a.btn{display:block;text-align:center;text-decoration:none}
 
 <div id="gate" class="screen">
   <div class="box">
-    <h2>Assinatura inativa</h2>
-    <p>Sua assinatura não está ativa no momento. Seus lançamentos continuam guardados e voltam a aparecer assim que ela for reativada.</p>
+    <h2 id="gateTitle">Assinatura inativa</h2>
+    <p id="gateText">Sua assinatura não está ativa no momento. Seus lançamentos continuam guardados e voltam a aparecer assim que ela for reativada.</p>
     <a class="btn primary" id="gateBuy" target="_blank" rel="noopener">Assinar novamente</a>
     <a class="btn ghost" id="gateHelp" target="_blank" rel="noopener" style="margin-top:8px">Falar com o suporte</a>
     <button type="button" class="linkbtn" id="gateOut">Sair</button>
@@ -408,6 +432,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
 
 <div class="wrap">
   <div class="userbar"><span id="who"></span><span><button type="button" id="installBtn" style="display:none">Instalar app</button> <button type="button" id="catBtn">Categorias</button> <button type="button" id="themeBtn">Tema</button> <a id="helpLink" target="_blank" rel="noopener">Ajuda</a> <a class="lnkTermos" target="_blank" rel="noopener">Termos</a> <button type="button" id="logout">Sair</button></span></div>
+  <div class="trialbar" id="trialBar" style="display:none"><span id="trialTxt"></span><a id="trialBuy" target="_blank" rel="noopener">Assinar</a></div>
   <div class="hello" id="hello" style="display:none"><span id="helloTxt"></span><button type="button" id="helloEdit" aria-label="Alterar meu nome" title="Alterar meu nome">✎</button></div>
   <div class="tabs" id="tabs">
     <button class="on" data-v="ini">Início</button>
@@ -872,6 +897,11 @@ const SUPABASE_URL = "https://gdgkbhcvonkieesivspy.supabase.co";
 const SUPABASE_KEY = "sb_publishable_x_eFABu3sypprNK8_ujkQw_QZA_R3t_";
 // ===== VENDAS E SUPORTE (preencha) =====
 const LINK_ASSINATURA = "";   // link do checkout na Kiwify
+// ===== TESTE GRÁTIS =====
+// true mostra "Criar conta grátis" no login. Antes de ligar: preencha LINK_ASSINATURA
+// e marque "Allow new users to sign up" no Supabase (Authentication → Sign In / Providers).
+const TESTE_GRATIS = false;
+const DIAS_TESTE = 7;         // só o texto; o prazo de verdade fica no banco (função novo_assinante)
 const SUPORTE_WHATSAPP = "";  // só números, com DDI e DDD. Ex.: 5511999999999
 // ===== TERMOS E PRIVACIDADE (troque quando tiver o domínio próprio) =====
 const TERMOS_URL = "https://kaduferreira10.github.io/salduu/termos.html";
@@ -2474,11 +2504,33 @@ async function loadAll(){
 }
 let lastUser = undefined;
 function showLogin(on){ $("login").classList.toggle("open", on); }
-function showScreen(id){ ["login","pwd","gate","nome"].forEach(s=>$(s).classList.toggle("open", s===id)); }
+function showScreen(id){ ["login","signup","pwd","gate","nome"].forEach(s=>$(s).classList.toggle("open", s===id)); }
+let acesso = {ativo:true, testeAte:null};
 async function hasAccess(){
-  const {data, error} = await sb.from("assinantes").select("ativo").eq("user_id", me.id).maybeSingle();
+  acesso = {ativo:true, testeAte:null};
+  let {data, error} = await sb.from("assinantes").select("ativo,teste_ate").eq("user_id", me.id).maybeSingle();
+  if(error && /teste_ate/.test(error.message||"")) ({data, error} = await sb.from("assinantes").select("ativo").eq("user_id", me.id).maybeSingle());
   if(error) return true; // tabela ainda não criada ou falha de rede: o banco continua protegendo os dados
-  return !!(data && data.ativo);
+  if(!data) return false;
+  acesso = {ativo:!!data.ativo, testeAte: data.teste_ate ? new Date(data.teste_ate) : null};
+  return acesso.ativo || (!!acesso.testeAte && acesso.testeAte > new Date());
+}
+function diasRestantes(ate){ return Math.max(0, Math.ceil((ate - new Date())/86400000)); }
+function renderTrial(){
+  const bar = $("trialBar");
+  if(!me || acesso.ativo || !acesso.testeAte){ bar.style.display = "none"; return; }
+  const n = diasRestantes(acesso.testeAte);
+  $("trialTxt").textContent = n<=1 ? "Seu teste grátis termina hoje" : `Teste grátis: faltam ${n} dias`;
+  bar.classList.toggle("fim", n<=2);
+  bar.style.display = "";
+}
+function textoGate(){
+  const fimTeste = !acesso.ativo && acesso.testeAte;
+  $("gateTitle").textContent = fimTeste ? "Seu teste grátis terminou" : "Assinatura inativa";
+  $("gateText").textContent = fimTeste
+    ? "Esperamos que tenha gostado! Assine para continuar usando. Tudo o que você lançou está guardado e volta a aparecer assim que a assinatura for ativada."
+    : "Sua assinatura não está ativa no momento. Seus lançamentos continuam guardados e voltam a aparecer assim que ela for reativada.";
+  $("gateBuy").textContent = fimTeste ? "Assinar agora" : "Assinar novamente";
 }
 function nomeDe(u){
   const m = (u && u.user_metadata) || {};
@@ -2509,7 +2561,7 @@ function abrirNome(editar){
 async function onSession(session){
   me = session ? session.user : null;
   loaded = false; contas = []; prevs = {}; contasLoaded = false; contasOk = true; planos = []; planosLoaded = false; planosOk = true;
-  if(!me){ items=[]; custom={saida:[],entrada:[]}; render(); renderMgr(); renderHello(); showScreen("login"); return; }
+  if(!me){ items=[]; custom={saida:[],entrada:[]}; render(); renderMgr(); renderHello(); acesso = {ativo:true, testeAte:null}; renderTrial(); showScreen("login"); return; }
   $("who").textContent = me.email;
   if(needPassword){
     const rec = AUTH_TYPE==="recovery" || !AUTH_TYPE;
@@ -2520,7 +2572,8 @@ async function onSession(session){
     $("pNome").required = $("pSobre").required = semNome;
     showScreen("pwd"); setTimeout(()=>$(semNome ? "pNome" : "pNew").focus(),50); return;
   }
-  if(!(await hasAccess())){ items=[]; render(); showScreen("gate"); return; }
+  if(!(await hasAccess())){ items=[]; render(); textoGate(); showScreen("gate"); return; }
+  renderTrial();
   showScreen(null);
   renderHello();
   sincronizarTema();
@@ -2601,7 +2654,39 @@ $("nomeForm").addEventListener("submit", async e=>{
 $("welcomeOk").onclick = ()=>{ try{ localStorage.setItem(welcomeKey(), "1"); }catch(e){} $("welcome").style.display = "none"; };
 
 // links de assinatura e suporte
-if(LINK_ASSINATURA) $("gateBuy").href = LINK_ASSINATURA; else $("gateBuy").style.display = "none";
+if(LINK_ASSINATURA){ $("gateBuy").href = LINK_ASSINATURA; $("trialBuy").href = LINK_ASSINATURA; }
+else { $("gateBuy").style.display = "none"; $("trialBuy").style.display = "none"; }
+document.querySelectorAll(".diasTeste").forEach(el=>el.textContent = DIAS_TESTE);
+if(TESTE_GRATIS) $("toSignup").style.display = "";
+$("toSignupBtn").onclick = ()=>{ $("sErr").textContent = ""; $("sMsg").textContent = ""; $("sEmail").value = $("lEmail").value.trim(); showScreen("signup"); setTimeout(()=>$("sNome").focus(),50); };
+$("toLogin").onclick = ()=>{ $("lEmail").value = $("sEmail").value.trim() || $("lEmail").value; showScreen("login"); };
+$("signupForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!sb) return;
+  const nome = limpaNome($("sNome").value), sobrenome = limpaNome($("sSobre").value), email = $("sEmail").value.trim(), senha = $("sPass").value;
+  $("sErr").textContent = ""; $("sMsg").textContent = "";
+  if(!nome || !sobrenome){ $("sErr").textContent = "Preencha seu nome e sobrenome."; return; }
+  if(senha.length < 6){ $("sErr").textContent = "A senha precisa ter pelo menos 6 caracteres."; return; }
+  $("sBtn").disabled = true;
+  const {data, error} = await sb.auth.signUp({email, password:senha, options:{data:{nome, sobrenome}, emailRedirectTo: location.origin + location.pathname}});
+  $("sBtn").disabled = false;
+  if(error){
+    const m = error.message || "";
+    $("sErr").textContent = /already|registered|exists/i.test(m) ? "Esse e-mail já tem conta. Toque em “Já tenho conta · Entrar”."
+      : /not allowed|disabled/i.test(m) ? "O cadastro está fechado no momento. Fale com o suporte."
+      : /rate|seconds|too many/i.test(m) ? "Muitas tentativas. Aguarde um minuto e tente de novo."
+      : /password/i.test(m) ? "Escolha uma senha mais forte (misture letras e números)."
+      : "Não foi possível criar a conta. Confira o e-mail e tente de novo.";
+    return;
+  }
+  // Supabase não avisa quando o e-mail já existe (por segurança): nesse caso não volta nenhuma identidade
+  if(data && data.user && Array.isArray(data.user.identities) && !data.user.identities.length){
+    $("sErr").textContent = "Esse e-mail já tem conta. Toque em “Já tenho conta · Entrar”."; return;
+  }
+  if(data && data.session) return; // confirmação de e-mail desligada: já entra direto
+  $("sPass").value = "";
+  $("sMsg").textContent = `Quase lá! Enviamos um link para ${email}. Abra o e-mail e toque no link para começar seu teste. Confira também o spam.`;
+});
 [["gateHelp"],["helpLink"],["welcomeHelpLink"]].forEach(([id])=>{ if(HELP_URL) $(id).href = HELP_URL; });
 document.querySelectorAll(".lnkTermos").forEach(a=>{ a.href = TERMOS_URL; });
 document.querySelectorAll(".lnkPriv").forEach(a=>{ a.href = PRIVACIDADE_URL; });
