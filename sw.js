@@ -1,7 +1,7 @@
 // Salduu+ — service worker
 // Sempre tenta buscar a versão mais nova na internet; usa a cópia guardada só se estiver sem conexão.
 // Os dados (Supabase) nunca passam por aqui.
-const CACHE = "salduu-v1";
+const CACHE = "salduu-v2";
 const ARQUIVOS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
