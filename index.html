@@ -184,6 +184,10 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .legal{font-size:12px;color:var(--muted);text-align:center;line-height:1.5;margin:14px 0 0}
 .legal a{color:var(--muted);text-decoration:underline}
 .userbar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
+.hello{display:flex;align-items:center;gap:6px;margin:0 0 12px;font-size:20px;font-weight:700;line-height:1.25;min-height:25px}
+.hello span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hello button{flex:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.nomeRow{display:flex;gap:10px}.nomeRow .field{flex:1;min-width:0}
 .userbar button{border:0;background:transparent;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 .more{display:block;width:100%;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
 .mgrh{font-size:12px;color:var(--muted);margin:4px 0 6px;font-weight:600}
@@ -293,10 +297,27 @@ a.btn{display:block;text-align:center;text-decoration:none}
   <form id="pwdForm" class="box" autocomplete="on">
     <h2 id="pwdTitle">Crie sua senha</h2>
     <p id="pwdText">Escolha a senha que você vai usar para entrar no sistema.</p>
+    <div class="nomeRow" id="pNomeBox">
+      <div class="field"><label for="pNome">Nome</label><input id="pNome" autocomplete="given-name" maxlength="40"></div>
+      <div class="field"><label for="pSobre">Sobrenome</label><input id="pSobre" autocomplete="family-name" maxlength="60"></div>
+    </div>
     <div class="field"><label for="pNew">Nova senha</label><input id="pNew" type="password" autocomplete="new-password" minlength="6" required></div>
     <div class="field"><label for="pNew2">Repita a senha</label><input id="pNew2" type="password" autocomplete="new-password" minlength="6" required></div>
     <div class="err" id="pErr"></div>
     <div class="actions"><button type="submit" class="btn primary" id="pBtn">Salvar senha</button></div>
+  </form>
+</div>
+
+<div id="nome" class="screen">
+  <form id="nomeForm" class="box" autocomplete="on">
+    <h2 id="nomeTitle">Como podemos te chamar?</h2>
+    <p id="nomeText">Informe seu nome para personalizarmos o sistema para você.</p>
+    <div class="nomeRow">
+      <div class="field"><label for="nNome">Nome</label><input id="nNome" autocomplete="given-name" maxlength="40" required></div>
+      <div class="field"><label for="nSobre">Sobrenome</label><input id="nSobre" autocomplete="family-name" maxlength="60" required></div>
+    </div>
+    <div class="err" id="nErr"></div>
+    <div class="actions"><button type="button" class="btn ghost" id="nCancel" style="display:none">Cancelar</button><button type="submit" class="btn primary" id="nBtn">Salvar</button></div>
   </form>
 </div>
 
@@ -313,6 +334,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
 
 <div class="wrap">
   <div class="userbar"><span id="who"></span><span><button type="button" id="installBtn" style="display:none">Instalar app</button> <button type="button" id="themeBtn">Tema</button> <a id="helpLink" target="_blank" rel="noopener">Ajuda</a> <a class="lnkTermos" target="_blank" rel="noopener">Termos</a> <button type="button" id="logout">Sair</button></span></div>
+  <div class="hello" id="hello" style="display:none"><span id="helloTxt"></span><button type="button" id="helloEdit" aria-label="Alterar meu nome" title="Alterar meu nome">✎</button></div>
   <div class="tabs" id="tabs">
     <button class="on" data-v="mes">Mês</button>
     <button data-v="con">Contas</button>
@@ -2102,25 +2124,56 @@ async function loadAll(){
 }
 let lastUser = undefined;
 function showLogin(on){ $("login").classList.toggle("open", on); }
-function showScreen(id){ ["login","pwd","gate"].forEach(s=>$(s).classList.toggle("open", s===id)); }
+function showScreen(id){ ["login","pwd","gate","nome"].forEach(s=>$(s).classList.toggle("open", s===id)); }
 async function hasAccess(){
   const {data, error} = await sb.from("assinantes").select("ativo").eq("user_id", me.id).maybeSingle();
   if(error) return true; // tabela ainda não criada ou falha de rede: o banco continua protegendo os dados
   return !!(data && data.ativo);
 }
+function nomeDe(u){
+  const m = (u && u.user_metadata) || {};
+  return {nome: String(m.nome||"").trim(), sobrenome: String(m.sobrenome||"").trim()};
+}
+function limpaNome(s){ return String(s||"").replace(/\s+/g," ").trim(); }
+function saudacao(d){
+  const h = (d||new Date()).getHours();
+  return h>=5 && h<12 ? "Bom dia" : h>=12 && h<18 ? "Boa tarde" : "Boa noite";
+}
+function renderHello(){
+  const n = me ? nomeDe(me).nome : "";
+  $("helloTxt").textContent = n ? `${saudacao()}, ${n}` : `${saudacao()}!`;
+  $("hello").style.display = me ? "" : "none";
+}
+setInterval(renderHello, 60000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) renderHello(); });
+let nomeEditando = false;
+function abrirNome(editar){
+  nomeEditando = !!editar;
+  const n = nomeDe(me);
+  $("nNome").value = n.nome; $("nSobre").value = n.sobrenome; $("nErr").textContent = "";
+  $("nomeTitle").textContent = editar ? "Alterar meu nome" : "Como podemos te chamar?";
+  $("nomeText").textContent = editar ? "Esse é o nome que aparece na saudação do topo." : "Informe seu nome para personalizarmos o sistema para você.";
+  $("nCancel").style.display = editar ? "" : "none";
+  showScreen("nome"); setTimeout(()=>$("nNome").focus(),50);
+}
 async function onSession(session){
   me = session ? session.user : null;
   loaded = false; contas = []; prevs = {}; contasLoaded = false; contasOk = true; planos = []; planosLoaded = false; planosOk = true;
-  if(!me){ items=[]; custom={saida:[],entrada:[]}; render(); renderMgr(); showScreen("login"); return; }
+  if(!me){ items=[]; custom={saida:[],entrada:[]}; render(); renderMgr(); renderHello(); showScreen("login"); return; }
   $("who").textContent = me.email;
   if(needPassword){
     const rec = AUTH_TYPE==="recovery" || !AUTH_TYPE;
     $("pwdTitle").textContent = rec ? "Defina uma nova senha" : "Crie sua senha";
     $("pwdText").textContent = rec ? "Escolha uma nova senha para entrar no sistema." : "Bem-vindo! Escolha a senha que você vai usar para entrar no sistema.";
-    showScreen("pwd"); setTimeout(()=>$("pNew").focus(),50); return;
+    const semNome = !nomeDe(me).nome;
+    $("pNomeBox").style.display = semNome ? "" : "none";
+    $("pNome").required = $("pSobre").required = semNome;
+    showScreen("pwd"); setTimeout(()=>$(semNome ? "pNome" : "pNew").focus(),50); return;
   }
   if(!(await hasAccess())){ items=[]; render(); showScreen("gate"); return; }
   showScreen(null);
+  renderHello();
+  if(!nomeDe(me).nome) abrirNome(false);
   await loadAll();
 }
 $("loginForm").addEventListener("submit", async e=>{
@@ -2156,11 +2209,14 @@ $("forgot").onclick = async ()=>{
 $("pwdForm").addEventListener("submit", async e=>{
   e.preventDefault();
   const a = $("pNew").value, b = $("pNew2").value;
+  const pedeNome = $("pNomeBox").style.display !== "none";
+  const nome = limpaNome($("pNome").value), sobrenome = limpaNome($("pSobre").value);
   $("pErr").textContent = "";
+  if(pedeNome && (!nome || !sobrenome)){ $("pErr").textContent = "Preencha seu nome e sobrenome."; return; }
   if(a.length < 6){ $("pErr").textContent = "A senha precisa ter pelo menos 6 caracteres."; return; }
   if(a !== b){ $("pErr").textContent = "As duas senhas não são iguais."; return; }
   $("pBtn").disabled = true;
-  const {error} = await sb.auth.updateUser({password:a});
+  const {data:upd, error} = await sb.auth.updateUser(pedeNome ? {password:a, data:{nome, sobrenome}} : {password:a});
   $("pBtn").disabled = false;
   if(error){
     $("pErr").textContent = /different/i.test(error.message) ? "A nova senha precisa ser diferente da anterior." : "Não foi possível salvar a senha. Tente de novo.";
@@ -2170,7 +2226,25 @@ $("pwdForm").addEventListener("submit", async e=>{
   try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){}
   toast("Senha salva");
   const {data} = await sb.auth.getSession();
+  if(data.session && upd && upd.user) data.session.user = upd.user;
   onSession(data.session);
+});
+
+$("helloEdit").onclick = ()=>abrirNome(true);
+$("helloTxt").onclick = ()=>abrirNome(true);
+$("nCancel").onclick = ()=>showScreen(null);
+$("nomeForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const nome = limpaNome($("nNome").value), sobrenome = limpaNome($("nSobre").value);
+  $("nErr").textContent = "";
+  if(!nome || !sobrenome){ $("nErr").textContent = "Preencha seu nome e sobrenome."; return; }
+  $("nBtn").disabled = true;
+  const {data, error} = await sb.auth.updateUser({data:{nome, sobrenome}});
+  $("nBtn").disabled = false;
+  if(error){ $("nErr").textContent = "Não foi possível salvar. Verifique a internet e tente de novo."; return; }
+  if(data && data.user) me = data.user;
+  renderHello(); showScreen(null);
+  toast(nomeEditando ? "Nome atualizado" : `Prazer, ${nome}!`);
 });
 
 $("welcomeOk").onclick = ()=>{ try{ localStorage.setItem(welcomeKey(), "1"); }catch(e){} $("welcome").style.display = "none"; };
