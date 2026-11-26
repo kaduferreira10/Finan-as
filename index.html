@@ -187,20 +187,28 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .welcome ol{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.55}
 .welcome ol li{margin-bottom:6px}
 .welcome p{font-size:13px;color:var(--muted);margin:0 0 12px}
-.userbar a{color:var(--muted);font-size:12px;padding:4px}
 .legal{font-size:12px;color:var(--muted);text-align:center;line-height:1.5;margin:14px 0 0}
 .legal a{color:var(--muted);text-decoration:underline}
-.userbar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
-.hello{display:flex;align-items:center;gap:6px;margin:0 0 12px;font-size:20px;font-weight:700;line-height:1.25;min-height:25px}
-.hello span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hello button{flex:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.menuwrap{position:relative;margin-left:auto;flex:none}
+.menubtn{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;cursor:pointer}
+.menubtn svg{width:20px;height:20px}
+.menubtn[aria-expanded="true"]{border-color:var(--ink)}
+.menu{position:absolute;right:0;top:calc(100% + 6px);z-index:20;min-width:220px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:6px;font-size:15px;font-weight:500}
+.menu[hidden]{display:none}
+.menu .mwho{font-size:12px;font-weight:400;color:var(--muted);padding:8px 10px 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}
+.menu button,.menu a{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);font:inherit;padding:10px;border-radius:9px;cursor:pointer;text-decoration:none}
+.menu button:hover,.menu a:hover,.menu button:focus-visible,.menu a:focus-visible{background:var(--bg);outline:none}
+.menu .sair{color:var(--out)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+.hello{display:flex;align-items:center;gap:6px;margin:4px 0 12px;font-size:20px;font-weight:700;line-height:1.25;min-height:25px}
+.hello > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hello > button{flex:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:4px 6px;border-radius:8px}
 .signupcta{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .linkbtn.inline{display:inline;width:auto;margin:0;padding:0;color:var(--ink);font-weight:600;font-size:13px}
 .trialbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin:0 0 12px;font-size:13px}
 .trialbar.fim{border-color:var(--n2)}
 .trialbar a{flex:none;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;border-radius:999px;padding:6px 14px;font-size:13px}
 .nomeRow{display:flex;gap:10px}.nomeRow .field{flex:1;min-width:0}
-.userbar button{border:0;background:transparent;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 .more{display:block;width:100%;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
 .mgrh{font-size:12px;color:var(--muted);margin:4px 0 6px;font-weight:600}
 /* contas a pagar */
@@ -438,9 +446,23 @@ a.btn{display:block;text-align:center;text-decoration:none}
 </div>
 
 <div class="wrap">
-  <div class="userbar"><span id="who"></span><span><button type="button" id="installBtn" style="display:none">Instalar app</button> <button type="button" id="catBtn">Categorias</button> <button type="button" id="themeBtn">Tema</button> <a id="helpLink" target="_blank" rel="noopener">Ajuda</a> <a class="lnkTermos" target="_blank" rel="noopener">Termos</a> <button type="button" id="logout">Sair</button></span></div>
   <div class="trialbar" id="trialBar" style="display:none"><span id="trialTxt"></span><a id="trialBuy" target="_blank" rel="noopener">Assinar</a></div>
-  <div class="hello" id="hello" style="display:none"><span id="helloTxt"></span><button type="button" id="helloEdit" aria-label="Alterar meu nome" title="Alterar meu nome">✎</button></div>
+  <div class="hello" id="hello" style="display:none"><span id="helloTxt"></span><button type="button" id="helloEdit" aria-label="Alterar meu nome" title="Alterar meu nome">✎</button>
+    <div class="menuwrap">
+      <button type="button" class="menubtn" id="menuBtn" aria-label="Abrir menu" aria-haspopup="true" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <div class="menu" id="menu" role="menu" hidden>
+        <div class="mwho" id="who"></div>
+        <button type="button" role="menuitem" id="catBtn">Categorias</button>
+        <button type="button" role="menuitem" id="themeBtn">Tema</button>
+        <button type="button" role="menuitem" id="installBtn" style="display:none">Instalar app</button>
+        <a role="menuitem" id="helpLink" target="_blank" rel="noopener">Ajuda</a>
+        <hr>
+        <a role="menuitem" class="lnkTermos" target="_blank" rel="noopener">Termos de Uso</a>
+        <a role="menuitem" class="lnkPriv" target="_blank" rel="noopener">Privacidade</a>
+        <hr>
+        <button type="button" role="menuitem" id="logout" class="sair">Sair</button>
+      </div>
+    </div></div>
   <div class="tabs" id="tabs">
     <button class="on" data-v="ini">Início</button>
     <button data-v="mes">Mês</button>
@@ -2642,6 +2664,14 @@ $("pwdForm").addEventListener("submit", async e=>{
 });
 
 $("helloEdit").onclick = ()=>abrirNome(true);
+function menuAberto(on){
+  $("menu").hidden = !on; $("menuBtn").setAttribute("aria-expanded", on ? "true" : "false");
+  if(on){ const f = $("menu").querySelector("button:not([style*='none']),a[href]"); if(f) f.focus(); }
+}
+$("menuBtn").addEventListener("click", e=>{ e.stopPropagation(); menuAberto($("menu").hidden); });
+$("menu").addEventListener("click", e=>{ if(e.target.closest("button,a")) menuAberto(false); });
+document.addEventListener("click", e=>{ if(!$("menu").hidden && !e.target.closest(".menuwrap")) menuAberto(false); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !$("menu").hidden){ menuAberto(false); $("menuBtn").focus(); } });
 $("helloTxt").onclick = ()=>abrirNome(true);
 $("nCancel").onclick = ()=>showScreen(null);
 $("nomeForm").addEventListener("submit", async e=>{
