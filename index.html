@@ -126,6 +126,13 @@ label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px;font-weight
 .field{margin-bottom:12px}
 input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--ink)}
+.pwwrap{position:relative}
+.pwwrap input{padding-right:48px}
+.pwwrap input::-ms-reveal{display:none}
+.pweye{position:absolute;top:0;right:0;height:100%;width:46px;display:grid;place-items:center;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:0 10px 10px 0}
+.pweye:hover{color:var(--ink)}
+.pweye:focus-visible{outline:2px solid var(--ink);outline-offset:-4px}
+.pweye svg{width:20px;height:20px}
 textarea{resize:vertical;min-height:60px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .need{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -2650,6 +2657,29 @@ $("nomeForm").addEventListener("submit", async e=>{
   renderHello(); showScreen(null);
   toast(nomeEditando ? "Nome atualizado" : `Prazer, ${nome}!`);
 });
+
+// olhinho para ver a senha digitada
+(function(){
+  const OLHO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const RISCADO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.9 17.9A10.4 10.4 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.1-5.9M9.9 5.2A9.6 9.6 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M14.1 14.2a3 3 0 1 1-4.2-4.3"/><path d="M2 2l20 20"/></svg>';
+  document.querySelectorAll('input[type="password"]').forEach(inp=>{
+    const wrap = document.createElement("div"); wrap.className = "pwwrap";
+    inp.parentNode.insertBefore(wrap, inp); wrap.appendChild(inp);
+    const b = document.createElement("button"); b.type = "button"; b.className = "pweye";
+    const marcar = vis=>{ b.innerHTML = vis ? RISCADO : OLHO; b.setAttribute("aria-label", vis ? "Ocultar senha" : "Mostrar senha"); b.setAttribute("aria-pressed", vis ? "true" : "false"); b.title = vis ? "Ocultar senha" : "Mostrar senha"; };
+    marcar(false);
+    b.addEventListener("mousedown", e=>e.preventDefault()); // não tira o foco do campo
+    b.addEventListener("click", ()=>{
+      const vis = inp.type === "password";
+      const ini = inp.selectionStart, fim = inp.selectionEnd;
+      inp.type = vis ? "text" : "password"; marcar(vis);
+      if(document.activeElement === inp){ try{ inp.setSelectionRange(ini, fim); }catch(e){} }
+    });
+    wrap.appendChild(b);
+    // ao enviar o formulário, volta a esconder (o navegador salva a senha do jeito certo)
+    if(inp.form) inp.form.addEventListener("submit", ()=>{ if(inp.type==="text"){ inp.type = "password"; marcar(false); } });
+  });
+})();
 
 $("welcomeOk").onclick = ()=>{ try{ localStorage.setItem(welcomeKey(), "1"); }catch(e){} $("welcome").style.display = "none"; };
 
